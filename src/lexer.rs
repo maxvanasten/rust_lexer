@@ -54,10 +54,6 @@ impl Lexer {
     }
 
     fn push_identifier(&mut self) {
-        self.tokens.push(Token::new(
-            TokenType::Identifier,
-            self.current_buffer.clone(),
-        ));
         // Check if identifier is a keyword, if true, change tokentype to that keywords type
         let content: String = self.current_buffer.clone();
 
@@ -70,7 +66,7 @@ impl Lexer {
         self.current_buffer = "".to_owned();
     }
 
-    pub fn tokenize(mut self) {
+    pub fn tokenize(&mut self) {
         while self.input.len() > self.current_index {
             let character = self.current_character();
             match character {
@@ -170,15 +166,20 @@ impl Lexer {
         }
 
         // Purge empty identifiers
-        let mut parsed_tokens: Vec<Token> = vec![];
-        for token in self.tokens {
-            if token.content != "" {
-                parsed_tokens.push(token);
-            }
-        }
-        // Finished parsing
-        for token in parsed_tokens {
+        for token in &self.tokens {
             println!("[TOKEN] ({:?}): '{1}'", token.token_type, token.content);
         }
+    }
+
+    pub fn get_tokens(self) -> Vec<Token> {
+        let mut tokens: Vec<Token> = vec![];
+
+        for token in self.tokens {
+            if token.content != "" {
+                tokens.push(token);
+            }
+        }
+
+        tokens
     }
 }
