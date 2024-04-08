@@ -1,5 +1,6 @@
 #[derive(Debug)]
 enum TokenType {
+pub enum TokenType {
     Identifier, // ANY
     String,     // "ANY"
     Terminator, // ;
@@ -14,6 +15,7 @@ enum TokenType {
 
 #[derive(Debug)]
 struct Token {
+pub struct Token {
     token_type: TokenType,
     content: String,
 }
