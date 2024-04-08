@@ -196,6 +196,6 @@ fn main() {
         Err(_) => "".to_owned(),
     };
 
-    let mut lexer: Lexer = Lexer::new(input);
+    let lexer: Lexer = Lexer::new(input);
     lexer.parse_input();
 }
