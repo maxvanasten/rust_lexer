@@ -1,5 +1,4 @@
 #[derive(Debug)]
-enum TokenType {
 pub enum TokenType {
     Identifier, // ANY
     String,     // "ANY"
@@ -16,7 +15,6 @@ pub enum TokenType {
 }
 
 #[derive(Debug)]
-struct Token {
 pub struct Token {
     token_type: TokenType,
     content: String,
