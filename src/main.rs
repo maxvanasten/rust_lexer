@@ -28,7 +28,6 @@ fn main() {
     let mut lexer: lexer::Lexer = lexer::Lexer::new(input);
     // Turn input file into a list of tokens
     lexer.tokenize();
-    let tokens: Vec<lexer::Token> = lexer.get_tokens();
 
     let parser: parser::Parser = parser::Parser::new(vec![
         parser::Rule::new(
@@ -51,5 +50,5 @@ fn main() {
         ),
     ]);
 
-    parser.parse(tokens);
+    parser.parse(lexer.tokens);
 }

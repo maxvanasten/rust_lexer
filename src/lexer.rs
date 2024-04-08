@@ -49,7 +49,7 @@ pub struct Lexer {
     input: String,
     current_index: usize,
     current_buffer: String,
-    tokens: Vec<Token>,
+    pub tokens: Vec<Token>,
 }
 
 impl Lexer {
@@ -73,13 +73,15 @@ impl Lexer {
         // Check if identifier is a keyword, if true, change tokentype to that keywords type
         let content: String = self.current_buffer.clone();
 
-        let token_type: TokenType = match content.as_str() {
-            "thread" => TokenType::KwThread,
-            _ => TokenType::Identifier,
-        };
+        if content != "" {
+            let token_type: TokenType = match content.as_str() {
+                "thread" => TokenType::KwThread,
+                _ => TokenType::Identifier,
+            };
 
-        self.tokens.push(Token::new(token_type, content));
-        self.current_buffer = "".to_owned();
+            self.tokens.push(Token::new(token_type, content));
+            self.current_buffer = "".to_owned();
+        }
     }
 
     pub fn tokenize(&mut self) {
@@ -181,21 +183,8 @@ impl Lexer {
             }
         }
 
-        // Purge empty identifiers
         for token in &self.tokens {
             println!("[TOKEN] ({:?}): '{1}'", token.token_type, token.content);
         }
-    }
-
-    pub fn get_tokens(self) -> Vec<Token> {
-        let mut tokens: Vec<Token> = vec![];
-
-        for token in self.tokens {
-            if token.content != "" {
-                tokens.push(token);
-            }
-        }
-
-        tokens
     }
 }
