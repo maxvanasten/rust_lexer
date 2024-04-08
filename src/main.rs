@@ -103,7 +103,10 @@ impl Lexer {
                     self.current_index += 1;
                 }
                 _ => {
-                    self.current_buffer.push(character);
+                    // Skip certain characters
+                    if character != '\n' && character != '\t' && character != ' ' {
+                        self.current_buffer.push(character);
+                    }
 
                     self.current_index += 1;
                 }
