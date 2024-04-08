@@ -102,6 +102,54 @@ impl Lexer {
 
                     self.current_index += 1;
                 }
+                '{' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::LCurly, "{".to_owned()));
+                }
+                '}' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::RCurly, "}".to_owned()));
+                }
+                '(' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::LParen, "(".to_owned()));
+                }
+                ')' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::RParen, ")".to_owned()));
+                }
+                ',' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::Comma, ",".to_owned()));
+                }
+                '+' => {
+                    self.push_identifier();
+
+                    self.current_index += 1;
+
+                    self.tokens
+                        .push(Token::new(TokenType::Plus, "+".to_owned()));
+                }
                 _ => {
                     // Skip certain characters
                     if character != '\n' && character != '\t' && character != ' ' {
