@@ -12,7 +12,6 @@ enum TokenType {
     RCurly,     // }
     Plus,       // +
     Assign,     // =
-    EOF,        // End of file
 }
 
 #[derive(Debug)]
