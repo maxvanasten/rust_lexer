@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum TokenType {
     Identifier, // ANY
     String,     // "ANY"
@@ -16,8 +16,8 @@ pub enum TokenType {
 
 #[derive(Debug)]
 pub struct Token {
-    token_type: TokenType,
-    content: String,
+    pub token_type: TokenType,
+    pub content: String,
 }
 
 impl Token {
@@ -25,6 +25,22 @@ impl Token {
         Self {
             token_type,
             content,
+        }
+    }
+
+    pub fn print_token(&self) -> String {
+        match self.token_type {
+            TokenType::Identifier => "<Identifier>".to_owned() + self.content.as_str(),
+            TokenType::String => "<String>".to_owned() + self.content.as_str(),
+            TokenType::Terminator => "<Terminator>".to_owned(),
+            TokenType::LParen => "<LParen>".to_owned(),
+            TokenType::RParen => "<RParen>".to_owned(),
+            TokenType::Comma => "<Comma>".to_owned(),
+            TokenType::LCurly => "<LCurly>".to_owned(),
+            TokenType::RCurly => "<RCurly>".to_owned(),
+            TokenType::Plus => "<Plus>".to_owned(),
+            TokenType::Assign => "<Assign>".to_owned(),
+            TokenType::KwThread => "<Keyword>".to_owned() + self.content.as_str(),
         }
     }
 }

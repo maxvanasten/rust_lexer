@@ -1,6 +1,7 @@
 use std::{env, fs};
 
-pub mod lexer;
+mod lexer;
+mod parser;
 
 fn main() {
     let input_file_path: String;
@@ -24,6 +25,31 @@ fn main() {
         Err(_) => "".to_owned(),
     };
 
-    let lexer: lexer::Lexer = lexer::Lexer::new(input);
+    let mut lexer: lexer::Lexer = lexer::Lexer::new(input);
+    // Turn input file into a list of tokens
     lexer.tokenize();
+    let tokens: Vec<lexer::Token> = lexer.get_tokens();
+
+    let parser: parser::Parser = parser::Parser::new(vec![
+        parser::Rule::new(
+            "StringVarAssign".to_owned(),
+            vec![
+                lexer::TokenType::Identifier,
+                lexer::TokenType::Assign,
+                lexer::TokenType::String,
+                lexer::TokenType::Terminator,
+            ],
+        ),
+        parser::Rule::new(
+            "NumVarAssign".to_owned(),
+            vec![
+                lexer::TokenType::Identifier,
+                lexer::TokenType::Assign,
+                lexer::TokenType::Identifier,
+                lexer::TokenType::Terminator,
+            ],
+        ),
+    ]);
+
+    parser.parse(tokens);
 }
