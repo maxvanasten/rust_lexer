@@ -31,7 +31,7 @@ fn main() {
 
     let parser: parser::Parser = parser::Parser::new(vec![
         parser::Rule::new(
-            "StringVarAssign".to_owned(),
+            parser::RuleType::VarAssignString,
             vec![
                 lexer::TokenType::Identifier,
                 lexer::TokenType::Assign,
@@ -40,7 +40,7 @@ fn main() {
             ],
         ),
         parser::Rule::new(
-            "NumVarAssign".to_owned(),
+            parser::RuleType::VarAssignNum,
             vec![
                 lexer::TokenType::Identifier,
                 lexer::TokenType::Assign,

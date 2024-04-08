@@ -1,17 +1,28 @@
 use crate::lexer;
 
+#[derive(Debug)]
+struct Node {
+    identifier: String,
+    data: String,
+    children: Vec<Node>,
+}
+
+#[derive(Debug)]
+pub enum RuleType {
+    VarAssignString,
+    VarAssignNum,
+}
+
 pub struct Rule {
-    name: String,
+    identifier: RuleType,
     sequence: Vec<lexer::TokenType>,
-    tokens: Vec<lexer::Token>,
 }
 
 impl Rule {
-    pub fn new(name: String, sequence: Vec<lexer::TokenType>) -> Self {
+    pub fn new(identifier: RuleType, sequence: Vec<lexer::TokenType>) -> Self {
         Self {
-            name,
+            identifier,
             sequence,
-            tokens: vec![],
         }
     }
 }
@@ -30,7 +41,16 @@ impl Parser {
         // check if current sequence conforms to a rule
         let mut parsing_done: bool = false;
         let mut absolute_token_index: usize = 0;
+
+        let mut nodes: Vec<Node> = vec![];
+
         while !parsing_done {
+            let mut current_node: Node = Node {
+                identifier: "UNKNOWN".to_owned(),
+                data: "".to_owned(),
+                children: vec![],
+            };
+
             for rule in &self.rules {
                 // For every rule, loop through the tokens at the current index and see if they fit
                 let mut done: bool = false;
@@ -61,10 +81,59 @@ impl Parser {
                             rule_str += lexer::Token::print_token(tok).as_str();
                         }
 
-                        println!("Found matching rule: {0} ({1})", rule.name, rule_str)
+                        // NOTE: THIS IS WHERE RULES GET TURNED INTO AST NODES
+                        match rule.identifier {
+                            RuleType::VarAssignString => {
+                                current_node.identifier = "VarAssignString".to_owned();
+                                current_node.children = vec![
+                                    Node {
+                                        identifier: "name".to_owned(),
+                                        data: rule_tokens[0].content.clone(),
+                                        children: vec![],
+                                    },
+                                    Node {
+                                        identifier: "value".to_owned(),
+                                        data: rule_tokens[2].content.clone(),
+                                        children: vec![],
+                                    },
+                                ]
+                            }
+                            RuleType::VarAssignNum => {
+                                current_node.identifier = "VarAssignNum".to_owned();
+                                current_node.children = vec![
+                                    Node {
+                                        identifier: "name".to_owned(),
+                                        data: rule_tokens[0].content.clone(),
+                                        children: vec![],
+                                    },
+                                    Node {
+                                        identifier: "value".to_owned(),
+                                        data: rule_tokens[2].content.clone(),
+                                        children: vec![],
+                                    },
+                                ]
+                            }
+                        }
+
+                        nodes.push(current_node);
+                        current_node = Node {
+                            identifier: "".to_owned(),
+                            data: "".to_owned(),
+                            children: vec![],
+                        };
+
+                        println!("Found matching rule: {:?} ({1})", rule.identifier, rule_str)
                     }
                 }
             }
+        }
+
+        // Parsing is done
+        for node in nodes {
+            println!(
+                "[NODE] Id: {0}, data: {1}, children: {2:?}",
+                node.identifier, node.data, node.children
+            );
         }
     }
 }
