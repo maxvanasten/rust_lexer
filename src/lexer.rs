@@ -167,7 +167,7 @@ impl Lexer {
         }
         // Finished parsing
         for token in parsed_tokens {
-            println!("Token: {:?}", token)
+            println!("[TOKEN] ({:?}): '{1}'", token.token_type, token.content);
         }
     }
 }
