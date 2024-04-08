@@ -11,6 +11,8 @@ pub enum TokenType {
     RCurly,     // }
     Plus,       // +
     Assign,     // =
+    // KEYWORDS
+    KwThread,
 }
 
 #[derive(Debug)]
@@ -58,6 +60,15 @@ impl Lexer {
             TokenType::Identifier,
             self.current_buffer.clone(),
         ));
+        // Check if identifier is a keyword, if true, change tokentype to that keywords type
+        let content: String = self.current_buffer.clone();
+
+        let token_type: TokenType = match content.as_str() {
+            "thread" => TokenType::KwThread,
+            _ => TokenType::Identifier,
+        };
+
+        self.tokens.push(Token::new(token_type, content));
         self.current_buffer = "".to_owned();
     }
 
